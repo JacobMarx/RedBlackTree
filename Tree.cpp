@@ -86,6 +86,7 @@ void Tree::push(Node*& node, int input) {
 			node->left = new Node(input);
 			node->left->parent = node;
 			node->left->color = 2;
+			reColor(node);
 		}
 	}
 	if (node->right == NULL) {
@@ -93,93 +94,201 @@ void Tree::push(Node*& node, int input) {
 			node->right = new Node(input);
 			node->right->parent = node;
 			node->right->color = 2;
+			reColor(node);
 		}
-	}
-	
-	reColor(node);
-	
+	}	
 }
 
-void Tree::reColor(Node*) {
+void Tree::reColor(Node* node) {
+	// Saved pointers
+	Node* gParent;
+	Node* uncle;
+	Node* p;
+	
 	// Sets grandparent of node as node
-	if (node->parent->parent != NULL) {
+	if (node->parent != NULL && node->parent->parent != NULL) {
 		Node* gParent = node->parent->parent;
 	}
 	// Sets uncle of node as node
-	if (node->parent->parent->left != NULL) {
+	if (node->parent != NULL && node->parent->parent != NULL && node->parent->parent->left != NULL) {
 		if (node->parent->parent->left == node->parent) {
 			if (node->parent->parent->right != NULL) {
 				Node* uncle = node->parent->parent->right;
 			}
 		}
 	}
-	else if (node->parent->parent->right != NULL) {
+	else if (node->parent != NULL && node->parent->parent != NULL && node->parent->parent->right != NULL) {
 		if (node->parent->parent->right == node->parent) {
 			if (node->parent->parent->left != NULL) {
 				Node* uncle = node->parent->parent->left;
 			}
 		}
 	}
-	// If parent of new node's color is not black or new node is not root
-	if (node->parent->color != 1) {
-	// If new node's uncle is red
-		if (uncle != NULL) {
-			if (uncle->color == 2) {
-				// Change color of parent and uncle to black
-				node->parent->color = 1;
-				uncle->color = 1;
-				// Color of grandparent to red
-				gParent->color = 2;
-				// New node's 
-				if (gParent != NULL) {
-					reColor(gParent);
+	if (node->parent != NULL) {
+		p = node->parent;
+	}
+	if (node->parent != NULL) {
+		// If parent of new node's color is not black or new node is not root
+		if (node->parent->color != 1) {
+		// If new node's uncle is red
+			if (uncle != NULL) {
+				if (uncle->color == 2) {
+					// Change color of parent and uncle to black
+					node->parent->color = 1;
+					uncle->color = 1;
+					// Color of grandparent to red
+					gParent->color = 2;
+					// New node's 
+					if (gParent != NULL) {
+						reColor(gParent);
+					}
 				}
 			}
-		}
-	// If new node's uncle is black
-		if (uncle != NULL) {
-			if (uncle->color == 1) {
-				// Left left case
-				if (gParent->left != NULL && node->parent->left != NULL) {
-					if (gParent->left == node->parent && parent->left == node) {
-						// Right rotate gParent
-						if (node->parent->right != NULL) {
-							gParent->left = node->parent->right;
+		// If new node's uncle is black
+			if (uncle != NULL) {
+				if (uncle->color == 1) {
+					// Left left case
+					if (gParent->left != NULL && node->parent->left != NULL) {
+						if (gParent->left == node->parent && p->left == node) {
+							// Right rotate gParent
+							if (node->parent->right != NULL) {
+								gParent->left = node->parent->right;
+							}
+							else {
+								gParent->left == NULL;
+							}
+							node->parent->right = gParent;
+							if (gParent->parent != NULL) {
+								if (gParent->parent->left != NULL) {
+									if (gParent->parent->left == gParent) {
+										gParent->parent->left = p;
+										p->parent = gParent->parent;
+									}
+								}
+								else {
+									gParent->parent->right = p;
+									p->parent = gParent->parent;
+								}
+							}
+							gParent->parent = p;
+							// Swap colors of gParent and parent
+							int gcolor = gParent->color;
+							gParent->color = node->parent->color;
+							node->parent->color = gcolor;
 						}
-						else {
-							gParent->left == NULL;
+					}
+					//Left right case
+					if (gParent->left != NULL && node->parent->right != NULL) {
+						if (gParent->left == node->parent && node->parent->right == node) {
+							// Left rotate parent
+							gParent->left = node;
+							node->parent->parent = node;
+							if (node->left != NULL) {
+								node->parent->right = node->left;
+							}
+							else {
+								node->parent->right = NULL;
+							}
+							node->left = node->parent;
+							node->parent = gParent;
+							// Apply left left case
+							// Right rotate gParent
+							if (node->right != NULL) {
+								gParent->left = node->right;
+							}
+							else {
+								gParent->left == NULL;
+							}
+							p->parent->right = gParent;
+							if (gParent->parent != NULL) {
+								if (gParent->parent->left != NULL) {
+									if (gParent->parent->left == gParent) {
+										gParent->parent->left = node;
+									}
+									else {
+										gParent->parent->right = node;
+									}
+								}
+							}
+							node->parent = gParent->parent;
+							gParent->parent = node;
+							// Swap colors of gParent and parent
+							int gcolor = gParent->color;
+							gParent->color = node->color;
+							node->color = gcolor;
 						}
-						node->parent->right = gParent;
-						gparent->parent = node->parent;
-						// Swap colors of gParent and parent
-						int gcolor = gParent->color;
-						gParent->color = node->parent->color;
-						node->parent->color = gcolor;
 					}
-				}
-				//Left right case
-				if (gParent->left != NULL && node->parent->right != NULL) {
-					if (gParent->left == node->parent && node->parent->right == node) {
-						// Left rotate parent
-						gParent->left = node;
-						
-						// Apply left left case
+					//Right right case
+					if (gParent->right != NULL && node->parent->right != NULL) {
+						if (gParent->right == node->parent && node->parent->right == node) {
+							// Left rotate gParent
+							if (p->left != NULL) {
+								gParent->right = p->left;
+							}
+							else {
+								gParent->right = NULL;
+							}
+							p->left = gParent;
+							if (gParent->parent != NULL) {
+								if (gParent->left != NULL) {
+									if (gParent->parent->left == gParent) {
+										gParent->parent->left = p;
+									}
+									else {
+										gParent->parent->right = p;
+									}
+								}
+							}
+							p->parent = gParent->parent;
+							gParent->parent = p;
+							// Swap color of gParent and p
+							int gcolor = gParent->color;
+							gParent->color = p->color;
+							p->color = gcolor;
+						}
 					}
-				}
-				//Right right case
-				if (gParent->right != NULL && node->parent->right != NULL) {
-					if (gParent->right == node->parent && node->parent->right == node) {
-						// Stuff
-					}
-				}
-				// Right left case
-				if (gParent->right != NULL && node->parent->left != NULL) {
-					if (gParent->right == node->parent && node->parent->left == node) {
-						// Stuff
+					// Right left case
+					if (gParent->right != NULL && node->parent->left != NULL) {
+						if (gParent->right == node->parent && node->parent->left == node) {
+							// Right rotate p
+							gParent->right = node;
+							if (node->right != NULL) {
+								p->left = node->right;
+							}
+							else {
+								p->left = NULL;
+							}
+							node->parent = gParent;
+							p->parent = node;
+							// Apply right right case
+							// Left rotate gParent
+							if (node->left != NULL) {
+								gParent->right = node->left;
+							}
+							else {
+								gParent->right = NULL;
+							}
+							node->left = gParent;
+							if (gParent->parent != NULL) {
+								if (gParent->left != NULL) {
+									if (gParent->parent->left == gParent) {
+										gParent->parent->left = node;
+									}
+									else {
+										gParent->parent->right = node;
+									}
+								}
+							}
+							node->parent = gParent->parent;
+							gParent->parent = node;
+							// Swap color of gParent and p
+							int gcolor = gParent->color;
+							gParent->color = node->color;
+							node->color = gcolor;
+						}
 					}
 				}
 			}
 		}
 	}
-
 }
