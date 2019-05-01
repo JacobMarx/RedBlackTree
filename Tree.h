@@ -18,8 +18,14 @@ public:
 	//Member Functions
 	bool isempty() const;
 	int pop();
+	int getCase(Node*, Node*, Node*, Node*);
 	Node* getRoot();
 	
+	void lLeft(Node*, Node*, Node*, Node*);
+	void lRight(Node*, Node*, Node*, Node*);
+	void rRight(Node*, Node*, Node*, Node*);
+	void rLeft(Node*, Node*, Node*, Node*);
+	void setFam(Node*);
 	void display();
 	void remove(int);
 	void push(int);
