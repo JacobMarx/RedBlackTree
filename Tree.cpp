@@ -30,7 +30,6 @@ void Tree::print(Node* node, int depth) const {
 	https://stackoverflow.com/questions/2616906/how-do-i-output-coloured-text-to-a-linux-terminal
 	by Daniel Langar
 	*/
-	
 	const std::string red("\033[0;31m");
 	const std::string reset("\033[0m");
 	
@@ -88,7 +87,7 @@ void Tree::push(Node*& node, int input) {
 			node->left->parent = node;
 			node->left->color = 2;
 			std::cout << "New Node: " << node->left->data << std::endl << std::endl;
-			setFam(node);
+			setFam(node->left);
 		}
 	}
 	if (node->right == NULL) {
@@ -97,7 +96,7 @@ void Tree::push(Node*& node, int input) {
 			node->right->parent = node;
 			node->right->color = 2;
 			std::cout << "New Node: " << node->right->data << std::endl << std::endl;
-			setFam(node);
+			setFam(node->right);
 		}
 	}	
 }
@@ -240,20 +239,21 @@ void Tree::rRight(Node* node, Node* p, Node* g, Node* u) {
 	}
 	p->left = g;
 	if (g->parent != NULL) {
-		if (g->left != NULL) {
-			if (g->parent->left == g) {
-				g->parent->left = p;
-			}
-			else {
-				g->parent->right = p;
-			}
+		if (g->parent->left != NULL && g->parent->left == g) {
+			g->parent->left = p;
+		}
+		else {
+			g->parent->right = p;
 		}
 	}
+	else {
+		p->parent = NULL;
+	}
 	p->parent = g->parent;
+	g->parent = p;
 	if (g == root) {
 		root = p;
 	}
-	g->parent = p;
 	// Swap color of g and p
 	int gcolor = g->color;
 	g->color = p->color;
