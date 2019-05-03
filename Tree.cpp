@@ -111,8 +111,8 @@ void Tree::push(Node*& node, int input) {
 			push(node->right, input);
 		}
 	}
-	if (node->left == NULL) {
-		if (input < node->data) {
+	if (input < node->data) {
+		if (node->left == NULL) {
 			node->left = new Node(input);
 			node->left->parent = node;
 			node->left->color = 2;
@@ -120,8 +120,8 @@ void Tree::push(Node*& node, int input) {
 			setFam(node->left);
 		}
 	}
-	else if (node->right == NULL) {
-		if (input > node->data) {
+	else if (input > node->data) {
+		if (node->right == NULL) {
 			node->right = new Node(input);
 			node->right->parent = node;
 			node->right->color = 2;
