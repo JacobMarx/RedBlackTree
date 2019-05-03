@@ -43,11 +43,41 @@ void Tree::print(Node* node, int depth) const {
 		count--;
 	}
 	
-	if (node->color == 2) {
-	std::cout << red << node->data << reset << std::endl;
+	if (node->parent != NULL) {
+		if (node->parent->left == node) {
+			if (node->color == 2) {
+			std::cout << red << node->data << reset << "L" << " " << node->parent->data << std::endl;
+			}
+			else {
+				if (node->parent->left == node) {	
+					std::cout << node->data << "L" << " " << node->parent->data << std::endl;
+				}
+				else {
+					std::cout << node->data << "R" << " " << node->parent->data << std::endl;
+				}
+			}
+		}
+		else {
+			if (node->color == 2) {
+			std::cout << red << node->data << reset << "R" << " " << node->parent->data << std::endl;
+			}
+			else {
+				if (node->parent->left == node) {	
+					std::cout << node->data << "L" << " " << node->parent->data << std::endl;
+				}
+				else {
+					std::cout << node->data << "R" << " " << node->parent->data << std::endl;
+				}
+			}
+		}
 	}
 	else {
-		std::cout << node->data << std::endl;
+		if (node->color == 2) {
+			std::cout << red << node->data << reset << std::endl;
+		}
+		else {
+			std::cout << node->data << std::endl;
+		}
 	}
 	
 	print(node->left, depth + 1);
@@ -90,7 +120,7 @@ void Tree::push(Node*& node, int input) {
 			setFam(node->left);
 		}
 	}
-	if (node->right == NULL) {
+	else if (node->right == NULL) {
 		if (input > node->data) {
 			node->right = new Node(input);
 			node->right->parent = node;
@@ -265,6 +295,17 @@ void Tree::rLeft(Node* node, Node* p, Node* g, Node* u) {
 	// Right Left
 	
 	// Right rotate p
+	node->parent = g;
+	p->parent = node;
+	if (node->right != NULL) {
+		p->left = node->right;
+	}
+	else {
+		p->left = NULL;
+	}
+	g->right = node;
+	node->right = p;
+	/*
 	std::cout << "Rl case" << std::endl;
 	g->right = node;
 	if (node->right != NULL) {
@@ -275,6 +316,7 @@ void Tree::rLeft(Node* node, Node* p, Node* g, Node* u) {
 	}
 	p = g;
 	p->parent = node;
+	*/
 	// Apply right right case
 	rRight(node, p, g, u);
 }

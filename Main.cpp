@@ -18,19 +18,19 @@ int main() {
 void build() {
 	Tree* tree = new Tree();
 	
-	tree->push(34);
+	tree->push(2);
 	tree->display();
 	std::cout << "****************************" << std::endl;
-	tree->push(45);
+	tree->push(1);
 	tree->display();
 	std::cout << "****************************" << std::endl;
-	tree->push(23);
+	tree->push(5);
 	tree->display();
 	std::cout << "****************************" << std::endl;
-	tree->push(56);
+	tree->push(7);
 	tree->display();
 	std::cout << "****************************" << std::endl;
-	tree->push(39);
+	tree->push(4);
 	tree->display();
 }
 
