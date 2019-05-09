@@ -36,27 +36,47 @@ void build() {
 	tree->display();
 	*/
 	
-	/*
+	
 	std::cout << "****************************" << std::endl;
-	tree->push(6);
+	tree->push(23);
+	tree->display();
+	std::cout << "****************************" << std::endl;
+	tree->push(54);
+	tree->display();
+	std::cout << "****************************" << std::endl;
+	tree->push(12);
+	tree->display();
+	std::cout << "****************************" << std::endl;
+	tree->push(34);
+	tree->display();
+	std::cout << "****************************" << std::endl;
+	tree->push(27);
+	tree->display();
+	std::cout << "****************************" << std::endl;
+	tree->push(11);
 	tree->display();
 	std::cout << "****************************" << std::endl;
 	tree->push(7);
 	tree->display();
 	std::cout << "****************************" << std::endl;
-	tree->push(2);
+	tree->push(47);
 	tree->display();
 	std::cout << "****************************" << std::endl;
-	tree->push(4);
+	tree->push(39);
 	tree->display();
 	std::cout << "****************************" << std::endl;
-	tree->push(1);
+	tree->push(20);
 	tree->display();
 	std::cout << "****************************" << std::endl;
-	tree->push(3);
+	tree->push(59);
 	tree->display();
-	*/
+	std::cout << "****************************" << std::endl;
+	tree->push(15);
+	tree->display();
 	
+	
+	
+	/*
 	std::cout << "****************************" << std::endl;
 	tree->push(4);
 	tree->display();
@@ -72,24 +92,7 @@ void build() {
 	std::cout << "****************************" << std::endl;
 	tree->push(3);
 	tree->display();
-	
-	
-	/* RR
-	std::cout << "****************************" << std::endl;
-	tree->push(3);
-	tree->display();
-	std::cout << "****************************" << std::endl;
-	tree->push(5);
-	tree->display();
-	std::cout << "****************************" << std::endl;
-	tree->push(2);
-	tree->display();
-	std::cout << "****************************" << std::endl;
-	tree->push(4);
-	tree->display();
-	std::cout << "****************************" << std::endl;
-	tree->push(6);
-	tree->display();
 	*/
+	
 }
 
