@@ -18,6 +18,64 @@ int main() {
 void build() {
 	Tree* tree = new Tree();
 	
+	/* LL
+	std::cout << "****************************" << std::endl;
+	tree->push(4);
+	tree->display();
+	std::cout << "****************************" << std::endl;
+	tree->push(2);
+	tree->display();
+	std::cout << "****************************" << std::endl;
+	tree->push(6);
+	tree->display();
+	std::cout << "****************************" << std::endl;
+	tree->push(3);
+	tree->display();
+	std::cout << "****************************" << std::endl;
+	tree->push(1);
+	tree->display();
+	*/
+	
+	/*
+	std::cout << "****************************" << std::endl;
+	tree->push(6);
+	tree->display();
+	std::cout << "****************************" << std::endl;
+	tree->push(7);
+	tree->display();
+	std::cout << "****************************" << std::endl;
+	tree->push(2);
+	tree->display();
+	std::cout << "****************************" << std::endl;
+	tree->push(4);
+	tree->display();
+	std::cout << "****************************" << std::endl;
+	tree->push(1);
+	tree->display();
+	std::cout << "****************************" << std::endl;
+	tree->push(3);
+	tree->display();
+	*/
+	
+	std::cout << "****************************" << std::endl;
+	tree->push(4);
+	tree->display();
+	std::cout << "****************************" << std::endl;
+	tree->push(2);
+	tree->display();
+	std::cout << "****************************" << std::endl;
+	tree->push(6);
+	tree->display();
+	std::cout << "****************************" << std::endl;
+	tree->push(1);
+	tree->display();
+	std::cout << "****************************" << std::endl;
+	tree->push(3);
+	tree->display();
+	
+	
+	/* RR
+	std::cout << "****************************" << std::endl;
 	tree->push(3);
 	tree->display();
 	std::cout << "****************************" << std::endl;
@@ -32,5 +90,6 @@ void build() {
 	std::cout << "****************************" << std::endl;
 	tree->push(6);
 	tree->display();
+	*/
 }
 

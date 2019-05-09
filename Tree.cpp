@@ -117,7 +117,11 @@ void Tree::push(Node*& node, int input) {
 			node->left->parent = node;
 			node->left->color = 2;
 			std::cout << "New Node: " << node->left->data << std::endl << std::endl;
+			std::cout << "Pre recolor: " << std::endl;
+			display();
+			std::cout << "\t" << std::endl;
 			setFam(node->left);
+			std::cout << "Post recolor:" << std::endl;
 		}
 	}
 	else if (input > node->data) {
@@ -126,7 +130,11 @@ void Tree::push(Node*& node, int input) {
 			node->right->parent = node;
 			node->right->color = 2;
 			std::cout << "New Node: " << node->right->data << std::endl << std::endl;
+			std::cout << "Pre recolor: " << std::endl;
+			display();
+			std::cout << "\t" << std::endl;
 			setFam(node->right);
+			std::cout << "Post recolor:" << std::endl;
 		}
 	}	
 }
@@ -161,6 +169,9 @@ void Tree::setFam(Node* node) {
 	}
 	
 	if (u == NULL) {
+		if (node == root) {
+			node->color = 1;
+		}
 		return;
 	}
 	else {
@@ -169,7 +180,12 @@ void Tree::setFam(Node* node) {
 }
 
 int Tree::getCase(Node* node, Node* p, Node* g, Node* u) {
-	if (p->color != 1 || node != root) {
+	if (node == root) {
+		node->color = 1;
+	}
+	// || or && like just what??????????
+	//p->color != 1 || node != root
+	if (p->color != 1) {
 		if (u->color == 2) {
 			p->color = 1;
 			u->color = 1;
@@ -206,30 +222,31 @@ void Tree::lLeft(Node* node, Node* p, Node* g, Node* u) {
 	// Left Left
 
 	// Right rotate g
-	std::cout << "Rr case" << std::endl;
+	std::cout << "Ll case" << std::endl;
 	if (p->right != NULL) {
 		g->left = p->right;
+		g->left->parent = g;
 	}
 	else {
 		g->left == NULL;
 	}
 	p->right = g;
 	if (g->parent != NULL) {
-		if (g->parent->left != NULL) {
-			if (g->parent->left == g) {
-				g->parent->left = p;
-				p->parent = g->parent;
-			}
+		if (g->parent->left != NULL && g->parent->left == g) {
+			g->parent->left = p;
 		}
 		else {
 			g->parent->right = p;
-			p->parent = g->parent;
 		}
 	}
-	if (g == root) {
-		root = p;
+	else {
+		p->parent = NULL;
 	}
+	p->parent = g->parent;
 	g->parent = p;
+	if (g == root) {
+		root = g->parent;
+	}
 	// Swap colors of g and parent
 	int gcolor = g->color;
 	g->color = p->color;
@@ -243,6 +260,7 @@ void Tree::lRight(Node* node, Node* p, Node* g, Node* u) {
 	// Left rotate parent
 	std::cout << "Lr case" << std::endl;
 	g->left = node;
+	node->parent = g;
 	p->parent = node;
 	if (node->left != NULL) {
 		p->right = node->left;
@@ -251,9 +269,9 @@ void Tree::lRight(Node* node, Node* p, Node* g, Node* u) {
 		p->right = NULL;
 	}
 	node->left = p;
-	p = g;
+	//p = g;
 	// Apply left left case
-	lLeft(node, p, g, u);
+	lLeft(p, node, g, u);
 }
 
 void Tree::rRight(Node* node, Node* p, Node* g, Node* u) {
@@ -263,6 +281,7 @@ void Tree::rRight(Node* node, Node* p, Node* g, Node* u) {
 	std::cout << "Rr case" << std::endl;
 	if (p->left != NULL) {
 		g->right = p->left;
+		g->right->parent = g;
 	}
 	else {
 		g->right = NULL;
@@ -282,7 +301,7 @@ void Tree::rRight(Node* node, Node* p, Node* g, Node* u) {
 	p->parent = g->parent;
 	g->parent = p;
 	if (g == root) {
-		root = p;
+		root = g->parent;
 	}
 	// Swap color of g and p
 	int gcolor = g->color;
@@ -295,6 +314,7 @@ void Tree::rLeft(Node* node, Node* p, Node* g, Node* u) {
 	// Right Left
 	
 	// Right rotate p
+	std::cout << "Rl case" << std::endl;
 	node->parent = g;
 	p->parent = node;
 	if (node->right != NULL) {
@@ -318,7 +338,7 @@ void Tree::rLeft(Node* node, Node* p, Node* g, Node* u) {
 	p->parent = node;
 	*/
 	// Apply right right case
-	rRight(node, p, g, u);
+	rRight(p, node, g, u);
 }
 
 /*
