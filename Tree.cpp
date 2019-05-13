@@ -13,14 +13,14 @@ Tree::~Tree() {
 	
 }
 
-bool Tree::isempty() const {
+bool Tree::isempty() const { // Checks if the tree is empty if yes returns true
 	if (!root) {
 		return true;
 	}
 	return false;
 }
 
-Node* Tree::search(Node* node, int comp) {
+Node* Tree::search(Node* node, int comp) { // Recurses through the tree looking for node with certain data
 	if (node == NULL) { 
 		return NULL;
 	}
@@ -39,25 +39,25 @@ Node* Tree::search(Node* node, int comp) {
 	return NULL;
 }
 
-Node* Tree::min(Node* node) {
+Node* Tree::min(Node* node) { // Finds node with minimum value
 	while (node->right != NULL)  {
 		return min(node->right);
 	}
 	return node;
 }
 
-Node* Tree::findSucc(Node* node) {
+Node* Tree::findSucc(Node* node) { // Find the successor to a node
 	if (node->left != NULL) {
 		return min(node->left);
 	}
 	return NULL;
 }
 
-Node* Tree::getRoot() {
+Node* Tree::getRoot() { // Returns root
 	return root;
 }
 
-void Tree::print(Node* node, int depth) const {
+void Tree::print(Node* node, int depth) const { // Prints the visual display of tree with tabs and color
 	/*
 	Color stuff from 
 	https://stackoverflow.com/questions/2616906/how-do-i-output-coloured-text-to-a-linux-terminal
@@ -76,6 +76,7 @@ void Tree::print(Node* node, int depth) const {
 		count--;
 	}
 	
+	// Prints out the nodes and checks if they are right or left child of parent and their color
 	if (node->parent != NULL) {
 		if (node->parent->left == node) {
 			if (node->color == 2) {
@@ -116,12 +117,12 @@ void Tree::print(Node* node, int depth) const {
 	print(node->left, depth + 1);
 }
 
-void Tree::display() {
+void Tree::display() { // Display function
 	int depth = 0;
 	print(root, depth);
 }
 
-void Tree::push(int input) {
+void Tree::push(int input) { // Pushes if no root then the root is input, if there is root continue to other push
 	//	Black height of tree increases 1
 	if (!root) {
 		root = new Node(input, 1);
@@ -172,7 +173,7 @@ void Tree::push(Node*& node, int input) {
 	}	
 }
 
-void Tree::remove(int remove) {
+void Tree::remove(int remove) { // Remove function not use din insert
 	// Find node with data we want to remove
 	// Find successor of node we want to remove
 	// 
@@ -180,6 +181,7 @@ void Tree::remove(int remove) {
 	
 	Node* succ;
 	
+	// Find successor and swaps with node being removed and sets pointers
 	if (node->left != NULL && node->right != NULL) {
 		succ = findSucc(node);
 		if (succ == NULL) {
@@ -214,7 +216,7 @@ void Tree::remove(int remove) {
 
 }
 
-void Tree::setFam(Node* node) {
+void Tree::setFam(Node* node) { // Finds family members of a node and saves them
 	// Saved pointers
 	Node* g = NULL;
 	Node* u = NULL;
@@ -253,7 +255,7 @@ void Tree::setFam(Node* node) {
 	}
 }
 
-int Tree::getCase(Node* node, Node* p, Node* g, Node* u) {
+int Tree::getCase(Node* node, Node* p, Node* g, Node* u) { // Finds the case that needs to be executed
 	// ?
 	if (node == root) {
 		node->color = 1;

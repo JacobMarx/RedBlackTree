@@ -27,7 +27,7 @@ int main() {
 		char* in = new char[20];
 		clear(in);
 		//std::cin >> in;
-		if (tree->isempty() == true) {
+		if (tree->isempty() == true) { // If there is no tree then asks user if they want to make one
 			std::cout << "You do not have a tree would you like to create one? (yes or no)" << std::endl;
 			std::cin >> in;
 			if (strcmp(in, "yes") == 0) {
@@ -36,10 +36,10 @@ int main() {
 				tree->display();
 			}
 		}
-		else {
+		else { // If tree is not empty t ask the user what commands they want to execute
 			std::cout << "Would you like to 'add', 'read', 'print', or 'quit'?" << std::endl;
 			std::cin >> in;
-			if (strcmp(in, "add") == 0) {
+			if (strcmp(in, "add") == 0) { // Adds one number
 				getInput(tree);
 				clear(in);
 				tree->display();
@@ -66,22 +66,22 @@ int main() {
 				clear(in);
 			}
 			*/
-			else if (strcmp(in, "read") == 0) {
+			else if (strcmp(in, "read") == 0) { // Read in file
 				clear(in);
 				std::cout << "What is the name of the file?" << std::endl;
 				std::cin >> in;
 				getInput(tree, in);
 			}
-			else if (strcmp(in, "print") == 0) {
+			else if (strcmp(in, "print") == 0) { // Print tree
 				tree->display(); 
 				clear(in);
 			}
-			else if (strcmp(in, "quit") == 0) {
+			else if (strcmp(in, "quit") == 0) { //Stops program
 				stop = true;
 				// Need to delete tree
 				break;
 			}
-			else {
+			else { // If they don't enter valid input it asks the user if they want help
 				std::cout << "You did not enter a valid input. If you would like help enter 'help'." 
 				<< std::endl;
 				std::cin >> in;
@@ -117,15 +117,15 @@ int main() {
 	return 0;
 }
 
-void enter(Tree* tree) {
+void enter(Tree* tree) { // Ask the user if they want to input values via add or read function
 	char* in = new char[20];
 	clear(in);
 	std::cout << "Would you like to 'add' one number, or 'read' in from a file" << std::endl;
 	std::cin >> in;
-	if (strcmp(in, "add") == 0) {
+	if (strcmp(in, "add") == 0) { // Allows user to add one number
 		getInput(tree);
 	}
-	else if (strcmp(in, "read") == 0) {
+	else if (strcmp(in, "read") == 0) { // Allows user to input through file
 		clear(in);
 		std::cout << "What is the name of the file?" << std::endl;
 		std::cin >> in;
@@ -133,7 +133,7 @@ void enter(Tree* tree) {
 	}
 }
 
-void help() {
+void help() { // Help function that list all commands
 	std::cout << "********************HELP********************" << std::endl 
 	<< std::endl << "COMMANDS:" << std::endl 
 	<< "\t" << "'add' = Allows you to add to the tree." << std::endl 
@@ -143,7 +143,7 @@ void help() {
 	<< "********************************************" << std::endl;
 }
 
-bool getInput(Tree* tree, char* fileName) {
+bool getInput(Tree* tree, char* fileName) { // Input function with file
 	std::ifstream file;
 	//std::cout << "goon" << std::endl;
 	file.open(fileName);
@@ -177,7 +177,7 @@ bool getInput(Tree* tree, char* fileName) {
 	return false;
 }
 
-void getInput(Tree* tree) {
+void getInput(Tree* tree) { // Inptu function for one number
 	while (true) {
 		int input = 0;
 		//std::cout << "ghflkfjlj\n";
@@ -199,13 +199,13 @@ void getInput(Tree* tree) {
 	//std::cout << "Left function" << std::endl;
 }
 
-char* clear(char* arr) {
+char* clear(char* arr) { // Set array passed through to all NULLs
 	for (int i = 0; i <= 20; i++) {
 		arr[i] = '\0';
 	}
 }
 
-void build() {
+void build() { // Build function used for early debugging
 	Tree* tree = new Tree();
 	
 	/* LL
