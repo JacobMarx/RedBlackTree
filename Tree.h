@@ -20,6 +20,9 @@ public:
 	int pop();
 	int getCase(Node*, Node*, Node*, Node*);
 	Node* getRoot();
+	Node* findSucc(Node*);
+	Node* min(Node*);
+	Node* search(Node*, int);
 	
 	void lLeft(Node*, Node*, Node*, Node*);
 	void lRight(Node*, Node*, Node*, Node*);

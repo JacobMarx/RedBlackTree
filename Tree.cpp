@@ -20,6 +20,39 @@ bool Tree::isempty() const {
 	return false;
 }
 
+Node* Tree::search(Node* node, int comp) {
+	if (node == NULL) { 
+		return NULL;
+	}
+	if (node->data != comp) {
+		if (node->data < comp) {
+			return search(node->right, comp);
+		}
+		if (node->data > comp) {
+			return search(node->left, comp);
+		}
+	}
+	else if (node->data == comp) {
+		return node;
+	}
+	std::cout << "That number is not in the tree." << std::endl;
+	return NULL;
+}
+
+Node* Tree::min(Node* node) {
+	while (node->right != NULL)  {
+		return min(node->right);
+	}
+	return node;
+}
+
+Node* Tree::findSucc(Node* node) {
+	if (node->left != NULL) {
+		return min(node->left);
+	}
+	return NULL;
+}
+
 Node* Tree::getRoot() {
 	return root;
 }
@@ -116,12 +149,12 @@ void Tree::push(Node*& node, int input) {
 			node->left = new Node(input);
 			node->left->parent = node;
 			node->left->color = 2;
-			std::cout << "New Node: " << node->left->data << std::endl << std::endl;
-			std::cout << "Pre recolor: " << std::endl;
-			display();
-			std::cout << "\t" << std::endl;
+			//std::cout << "New Node: " << node->left->data << std::endl << std::endl;
+			//std::cout << "Pre recolor: " << std::endl;
+			//display();
+			//std::cout << "\t" << std::endl;
 			setFam(node->left);
-			std::cout << "Post recolor:" << std::endl;
+			//std::cout << "Post recolor:" << std::endl;
 		}
 	}
 	else if (input > node->data) {
@@ -129,14 +162,56 @@ void Tree::push(Node*& node, int input) {
 			node->right = new Node(input);
 			node->right->parent = node;
 			node->right->color = 2;
-			std::cout << "New Node: " << node->right->data << std::endl << std::endl;
-			std::cout << "Pre recolor: " << std::endl;
-			display();
-			std::cout << "\t" << std::endl;
+			//std::cout << "New Node: " << node->right->data << std::endl << std::endl;
+			//std::cout << "Pre recolor: " << std::endl;
+			//display();
+			//std::cout << "\t" << std::endl;
 			setFam(node->right);
-			std::cout << "Post recolor:" << std::endl;
+			//std::cout << "Post recolor:" << std::endl;
 		}
 	}	
+}
+
+void Tree::remove(int remove) {
+	// Find node with data we want to remove
+	// Find successor of node we want to remove
+	// 
+	Node* node = search(root, remove);
+	
+	Node* succ;
+	
+	if (node->left != NULL && node->right != NULL) {
+		succ = findSucc(node);
+		if (succ == NULL) {
+			delete[] node;
+			return;
+		}
+		node->data = succ->data;
+		node = succ;
+	}
+	
+	Node* child;
+	if (node->left != NULL) {
+		child = node->left;
+	}
+	else {
+		child = node->right;
+	}
+	
+	if (node->parent != NULL) {
+		if (node->parent->left == node) {
+			node->parent->left = child;
+		}
+		if (node->parent->right == node) {
+			node->parent->right = child;
+		}
+	}
+	else {
+		root = child;
+	}
+
+	delete[] node;
+
 }
 
 void Tree::setFam(Node* node) {
@@ -169,11 +244,9 @@ void Tree::setFam(Node* node) {
 	}
 	
 	// ?
-	if (u == NULL) {
-		if (node == root) {
+	
+	if (node == root) {
 			node->color = 1;
-		}
-		return;
 	}
 	else {
 		getCase(node, p, g, u);
@@ -188,14 +261,14 @@ int Tree::getCase(Node* node, Node* p, Node* g, Node* u) {
 	// || or && like just what??????????
 	//p->color != 1 || node != root
 	else if (p->color == 2) {
-		if (u->color == 2) {
+		if (u != NULL && u->color == 2) {
 			p->color = 1;
 			u->color = 1;
 			// Color of grandparent to red
 			g->color = 2;
 			setFam(g); 
 		}
-		else if (u->color == 1) {
+		else if (u == NULL || u->color == 1) {
 			// Left left case
 			if (g->left != NULL && p->left != NULL 
 			&& g->left == p && p->left == node) {
@@ -225,7 +298,7 @@ void Tree::lLeft(Node* node, Node* p, Node* g, Node* u) {
 
 	// Right rotate g
 	
-	std::cout << "Ll case" << std::endl;
+	//std::cout << "Ll case" << std::endl;
 	if (p->right != NULL) {
 		g->left = p->right;
 		g->left->parent = g;
@@ -282,14 +355,14 @@ void Tree::lLeft(Node* node, Node* p, Node* g, Node* u) {
 	int gcolor = g->color;
 	g->color = p->color;
 	p->color = gcolor;	
-	std::cout << "G color: " << g->color << std::endl << "P color: " << p->color << std::endl;
+	//std::cout << "G color: " << g->color << std::endl << "P color: " << p->color << std::endl;
 }
 
 void Tree::lRight(Node* node, Node* p, Node* g, Node* u) {
 	// Left Right
 
 	// Left rotate parent
-	std::cout << "Lr case" << std::endl;
+	//std::cout << "Lr case" << std::endl;
 	g->left = node;
 	node->parent = g;
 	p->parent = node;
@@ -309,7 +382,7 @@ void Tree::rRight(Node* node, Node* p, Node* g, Node* u) {
 	// Right Right
 	
 	// Left rotate g
-	std::cout << "Rr case" << std::endl;
+	//std::cout << "Rr case" << std::endl;
 	if (p->left != NULL) {
 		g->right = p->left;
 		g->right->parent = g;
@@ -338,14 +411,14 @@ void Tree::rRight(Node* node, Node* p, Node* g, Node* u) {
 	int gcolor = g->color;
 	g->color = p->color;
 	p->color = gcolor;
-	std::cout << "G color: " << g->color << std::endl << "P color: " << p->color << std::endl;
+	//std::cout << "G color: " << g->color << std::endl << "P color: " << p->color << std::endl;
 }
 
 void Tree::rLeft(Node* node, Node* p, Node* g, Node* u) {
 	// Right Left
 	
 	// Right rotate p
-	std::cout << "Rl case" << std::endl;
+	//std::cout << "Rl case" << std::endl;
 	node->parent = g;
 	p->parent = node;
 	if (node->right != NULL) {
