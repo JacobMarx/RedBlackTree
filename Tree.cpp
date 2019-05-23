@@ -63,6 +63,10 @@ void Tree::print(Node* node, int depth) const { // Prints the visual display of 
 	https://stackoverflow.com/questions/2616906/how-do-i-output-coloured-text-to-a-linux-terminal
 	by Daniel Langar
 	*/
+	
+	//if (node != NULL && node->data == 17) {
+	//	std::cout << node << std::endl;
+	//}
 	const std::string red("\033[0;31m");
 	const std::string reset("\033[0m");
 	
@@ -128,25 +132,33 @@ void Tree::push(int input) { // Pushes if no root then the root is input, if the
 		root = new Node(input, 1);
 	}
 	else {
-		push(root, input);
+		push(find(root, input), input);
 	}
 }
 
-void Tree::push(Node*& node, int input) {
+Node* Tree::find(Node* node, int input) { // Find node that new one will be put on
 	//	Standard BST insertion and node color is red
 	//std::cout << "Enter: " << node->data << std::endl;
-	if (node->left != NULL) {
-		if (input < node->data) {
-			push(node->left, input);
-		}
+	if (node->left != NULL && input < node->data) {
+		find(node->left, input);
+	
 	}
-	if (node->right != NULL) {
-		if (input > node->data) {
-			push(node->right, input);
-		}
+    if (node->right != NULL && input > node->data) {
+		find(node->right, input);
 	}
-	if (input < node->data) {
-		if (node->left == NULL) {
+	return node;
+}	
+
+void Tree::push(Node* node, int input) { // Creates new node
+	if (node->left != NULL && node->data > input) {
+		push(node->left, input);
+		return;
+	}
+	else if (node->right != NULL && node->data < input) {
+		push(node->right, input);
+		return;
+	}
+	if (node->left == NULL && input < node->data) {
 			node->left = new Node(input);
 			node->left->parent = node;
 			node->left->color = 2;
@@ -156,10 +168,10 @@ void Tree::push(Node*& node, int input) {
 			//std::cout << "\t" << std::endl;
 			setFam(node->left);
 			//std::cout << "Post recolor:" << std::endl;
-		}
+			//display();
+			return;
 	}
-	else if (input > node->data) {
-		if (node->right == NULL) {
+	else if (node->right == NULL && input > node->data) {
 			node->right = new Node(input);
 			node->right->parent = node;
 			node->right->color = 2;
@@ -169,8 +181,9 @@ void Tree::push(Node*& node, int input) {
 			//std::cout << "\t" << std::endl;
 			setFam(node->right);
 			//std::cout << "Post recolor:" << std::endl;
-		}
-	}	
+			//display();
+			return;
+	}
 }
 
 void Tree::remove(int remove) { // Remove function not use din insert
@@ -268,27 +281,33 @@ int Tree::getCase(Node* node, Node* p, Node* g, Node* u) { // Finds the case tha
 			u->color = 1;
 			// Color of grandparent to red
 			g->color = 2;
-			setFam(g); 
+			//std::cout << "p and u swap color with g" << std::endl;
+			//display();
+			setFam(g);
 		}
 		else if (u == NULL || u->color == 1) {
 			// Left left case
 			if (g->left != NULL && p->left != NULL 
 			&& g->left == p && p->left == node) {
-					lLeft(node, p, g, u);
+				lLeft(node, p, g, u);
+				//std::cout << "Ll case" << std::endl;
 			}
 			//Left right case
 			if (g->left != NULL && p->right != NULL 
 			&& g->left == p && p->right == node) {
 				lRight(node, p, g, u);
+				//std::cout << "Lr case" << std::endl;
 			}
 			//Right right case
 			if (g->right != NULL && p->right != NULL 
 			&& g->right == p && p->right == node) {
+				//std::cout << "Rr case" << std::endl;
 				rRight(node, p, g, u);
 			}
 			// Right left case
 			if (g->right != NULL && p->left != NULL 
 			&& g->right == p && p->left == node) {
+				//std::cout << "Rl case" << std::endl;
 				rLeft(node, p, g, u);
 			}
 		}
@@ -365,18 +384,21 @@ void Tree::lRight(Node* node, Node* p, Node* g, Node* u) {
 
 	// Left rotate parent
 	//std::cout << "Lr case" << std::endl;
-	g->left = node;
-	node->parent = g;
-	p->parent = node;
 	if (node->left != NULL) {
 		p->right = node->left;
+		p->right->parent = p;
 	}
 	else {
 		p->right = NULL;
 	}
 	node->left = p;
+	node->parent = g;
+	g->left = node;
+	p->parent = node;
 	//p = g;
 	// Apply left left case
+	//std::cout << "Pre Ll: " << std::endl;
+	//display();
 	lLeft(p, node, g, u);
 }
 
@@ -421,16 +443,17 @@ void Tree::rLeft(Node* node, Node* p, Node* g, Node* u) {
 	
 	// Right rotate p
 	//std::cout << "Rl case" << std::endl;
-	node->parent = g;
-	p->parent = node;
 	if (node->right != NULL) {
 		p->left = node->right;
+		p->left->parent = p;
 	}
 	else {
 		p->left = NULL;
 	}
-	g->right = node;
 	node->right = p;
+	node->parent = g;
+	g->right = node;
+	p->parent = node;
 	/*
 	std::cout << "Rl case" << std::endl;
 	g->right = node;
@@ -444,6 +467,9 @@ void Tree::rLeft(Node* node, Node* p, Node* g, Node* u) {
 	p->parent = node;
 	*/
 	// Apply right right case
+	//std::cout << node->data << std::endl;
+	//std::cout << "Pre Rr: " << std::endl;
+	//display();
 	rRight(p, node, g, u);
 }
 
